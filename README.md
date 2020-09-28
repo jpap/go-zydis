@@ -4,7 +4,7 @@
 
 It was created because the [pure-Go disassembler](https://godoc.org/golang.org/x/arch/x86/x86asm) is signficantly lacking in AMD64 support.  Decoding x86 is complex business, and it was more straightforward to make this port instead of digging deep into the pure-Go package.
 
-This repository uses Git LFS to store a precompiled version of the Zydis library (see below), so please make sure you have it installed before getting this package.
+**This repository uses [Git LFS](https://git-lfs.github.com/) to store a precompiled version of the Zydis library (see below), so please make sure you have it installed before getting this package.**
 
 ### Import
 
