@@ -6,27 +6,30 @@
 # build the Linux and Windows versions of the zydis library.
 #   1. Xcode
 #   2. brew install mingw-w64
-#   3. brew install musl-cross
+#   3. brew install musl-cross --with-aarch64
 
 CC_DARWIN_AMD64=clang
 CC_LINUX_AMD64=x86_64-linux-musl-gcc
+CC_LINUX_ARM64=aarch64-linux-musl-gcc
 CC_WINDOWS_386=i686-w64-mingw32-gcc
 CC_WINDOWS_AMD64=x86_64-w64-mingw32-gcc
 
 CXX_DARWIN_AMD64=clang++
 CXX_LINUX_AMD64=x86_64-linux-musl-g++
+CXX_LINUX_ARM64=aarch64-linux-musl-g++
 CXX_WINDOWS_386=i686-w64-mingw32-g++
 CXX_WINDOWS_AMD64=x86_64-w64-mingw32-g++
 
 LD_DARWIN_AMD64=ld
 LD_LINUX_AMD64=x86_64-linux-musl-ld
+LD_LINUX_ARM64=aarch64-linux-musl-ld
 LD_WINDOWS_386=i686-w64-mingw32-ld
 LD_WINDOWS_AMD64=x86_64-w64-mingw32-ld
 
 LDFLAGS_GCC=--whole-archive 
 LDFLAGS_CLANG=-all_load -arch x86_64
 
-.PHONY: all prepare clean install_headers darwin_amd64 linux_amd64
+.PHONY: all prepare clean install_headers darwin_amd64 linux_amd64 linux_arm64
 
 all: install
 
@@ -39,7 +42,6 @@ prepare: clean
 darwin_amd64: prepare
 	cd .build && \
 	env \
-		AR=$(AR_DARWIN_AMD64) \
 		CC=$(CC_DARWIN_AMD64) \
 		CXX=$(CXX_DARWIN_AMD64) \
 	cmake . && \
@@ -58,6 +60,19 @@ linux_amd64: prepare
 		. && \
 	make && \
 	$(LD_LINUX_AMD64) -r -o ../../libzydis_linux_amd64.syso $(LDFLAGS_GCC) libZydis.a
+
+linux_arm64: prepare
+	cd .build && \
+	env \
+		CC=$(CC_LINUX_ARM64) \
+		CXX=$(CXX_LINUX_ARM64) \
+	cmake \
+		-DCMAKE_SYSTEM_NAME=linux \
+		-DZYDIS_BUILD_EXAMPLES=OFF \
+		-DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+		. && \
+	make && \
+	$(LD_LINUX_ARM64) -r -o ../../libzydis_linux_arm64.syso $(LDFLAGS_GCC) libZydis.a
 
 windows_amd64: prepare
 	cd .build && \
