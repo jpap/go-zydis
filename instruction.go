@@ -5,7 +5,7 @@
 package zydis
 
 /*
-#cgo CFLAGS: -I./cgo/include
+#cgo CFLAGS: -I./lib/include
 #include <Zydis/Zydis.h>
 */
 import "C"
@@ -24,15 +24,15 @@ type DecodedInstruction struct {
 	zdi *C.ZydisDecodedInstruction
 
 	// The machine mode used to decode this instruction.
-	MachineMode
+	MachineMode MachineMode
 	// The instruction-mnemonic.
-	Mnemonic
+	Mnemonic Mnemonic
 	// The length of the decoded instruction.
 	Length uint8
 	// The instruction-encoding.
 	Encoding InstructionEncoding
 	// Opcode-map.
-	OpcodeMap
+	OpcodeMap OpcodeMap
 	// Instruction opcode.
 	Opcode uint8
 	// Stack width.
@@ -97,13 +97,13 @@ type DecodedInstruction struct {
 		// The instruction category.
 		Category InstructionCategory
 		// The ISA-set.
-		ISASet
+		ISASet ISASet
 		// The ISA-set extension.
-		ISAExt
+		ISAExt ISAExt
 		// The branch type.
-		BranchType
+		BranchType BranchType
 		// The exception class.
-		ExceptionClass
+		ExceptionClass ExceptionClass
 	}
 	// Detailed info about different instruction-parts like `ModRM`, `SIB` or
 	// encoding-prefixes.
@@ -528,107 +528,114 @@ const (
 )
 
 // InstructionCategory is an enum of instruction categories.
-//go:generate stringer -type=InstructionCategory -linecomment
 type InstructionCategory int
+
+//go:generate stringer -type=InstructionCategory -linecomment
 
 // InstructionCategory enum values
 const (
-	InstructionCategoryInvalid       InstructionCategory = iota // INVALID
-	InstructionCategoryADOX_ADCX                                // ADOX_ADCX
-	InstructionCategoryAES                                      // AES
-	InstructionCategoryAMD3DNOW                                 // AMD3DNOW
-	InstructionCategoryAVX                                      // AVX
-	InstructionCategoryAVX2                                     // AVX2
-	InstructionCategoryAVX2Gather                               // AVX2GATHER
-	InstructionCategoryAVX512                                   // AVX512
-	InstructionCategoryAVX512_4FMAPS                            // AVX512_4FMAPS
-	InstructionCategoryAVX512_4VNNIW                            // AVX512_4VNNIW
-	InstructionCategoryAVX512_BITALG                            // AVX512_BITALG
-	InstructionCategoryAVX512_VBMI                              // AVX512_VBMI
-	InstructionCategoryBinary                                   // BINARY
-	InstructionCategoryBitByte                                  // BITBYTE
-	InstructionCategoryBlend                                    // BLEND
-	InstructionCategoryBMI1                                     // BMI1
-	InstructionCategoryBMI2                                     // BMI2
-	InstructionCategoryBroadcast                                // BROADCAST
-	InstructionCategoryCall                                     // CALL
-	InstructionCategoryCET                                      // CET
-	InstructionCategoryCLDEMOTE                                 // CLDEMOTE
-	InstructionCategoryCLFlushHOPT                              // CLFLUSHOPT
-	InstructionCategoryCLWB                                     // CLWB
-	InstructionCategoryCLZero                                   // CLZERO
-	InstructionCategoryCMOV                                     // CMOV
-	InstructionCategoryCompress                                 // COMPRESS
-	InstructionCategoryCond_BR                                  // COND_BR
-	InstructionCategoryConflict                                 // CONFLICT
-	InstructionCategoryConvert                                  // CONVERT
-	InstructionCategoryDataXfer                                 // DATAXFER
-	InstructionCategoryDecimal                                  // DECIMAL
-	InstructionCategoryExpand                                   // EXPAND
-	InstructionCategoryFCMOV                                    // FCMOV
-	InstructionCategoryFLAGOP                                   // FLAGOP
-	InstructionCategoryFMA4                                     // FMA4
-	InstructionCategoryGather                                   // GATHER
-	InstructionCategoryGFNI                                     // GFNI
-	InstructionCategoryIFMA                                     // IFMA
-	InstructionCategoryInterrupt                                // INTERRUPT
-	InstructionCategoryIO                                       // IO
-	InstructionCategoryIOStringOP                               // IOSTRINGOP
-	InstructionCategoryKMask                                    // KMASK
-	InstructionCategoryKNC                                      // KNC
-	InstructionCategoryKNCMask                                  // KNCMASK
-	InstructionCategoryKNCScalar                                // KNCSCALAR
-	InstructionCategoryLogical                                  // LOGICAL
-	InstructionCategoryLogical_FP                               // LOGICAL_FP
-	InstructionCategoryLZCNT                                    // LZCNT
-	InstructionCategoryMisc                                     // MISC
-	InstructionCategoryMMX                                      // MMX
-	InstructionCategoryMOVDIR                                   // MOVDIR
-	InstructionCategoryMPX                                      // MPX
-	InstructionCategoryNOP                                      // NOP
-	InstructionCategoryPadlock                                  // PADLOCK
-	InstructionCategoryPCLMULQDQ                                // PCLMULQDQ
-	InstructionCategoryPConfig                                  // PCONFIG
-	InstructionCategoryPKU                                      // PKU
-	InstructionCategoryPOP                                      // POP
-	InstructionCategoryPrefetch                                 // PREFETCH
-	InstructionCategoryPrefetchWT1                              // PREFETCHWT1
-	InstructionCategoryPT                                       // PT
-	InstructionCategoryPush                                     // PUSH
-	InstructionCategoryRDPID                                    // RDPID
-	InstructionCategoryRDRAND                                   // RDRAND
-	InstructionCategoryRDSeed                                   // RDSEED
-	InstructionCategoryRDWRFSGS                                 // RDWRFSGS
-	InstructionCategoryRET                                      // RET
-	InstructionCategoryRotate                                   // ROTATE
-	InstructionCategoryScatter                                  // SCATTER
-	InstructionCategorySEGOP                                    // SEGOP
-	InstructionCategorySemaphore                                // SEMAPHORE
-	InstructionCategorySETCC                                    // SETCC
-	InstructionCategorySGX                                      // SGX
-	InstructionCategorySHA                                      // SHA
-	InstructionCategoryShift                                    // SHIFT
-	InstructionCategorySMAP                                     // SMAP
-	InstructionCategorySSE                                      // SSE
-	InstructionCategoryStringOP                                 // STRINGOP
-	InstructionCategorySTTNI                                    // STTNI
-	InstructionCategorySysCall                                  // SYSCALL
-	InstructionCategorySysRET                                   // SYSRET
-	InstructionCategorySystem                                   // SYSTEM
-	InstructionCategoryTBM                                      // TBM
-	InstructionCategoryUFMA                                     // UFMA
-	InstructionCategoryUncond_BR                                // UNCOND_BR
-	InstructionCategoryVAES                                     // VAES
-	InstructionCategoryVBMI2                                    // VBMI2
-	InstructionCategoryVFMA                                     // VFMA
-	InstructionCategoryVPCLMULQDQ                               // VPCLMULQDQ
-	InstructionCategoryVTX                                      // VTX
-	InstructionCategoryWaitPKG                                  // WAITPKG
-	InstructionCategoryWidenOp                                  // WIDENOP
-	InstructionCategoryX87_ALU                                  // X87_ALU
-	InstructionCategoryXOP                                      // XOP
-	InstructionCategoryXSave                                    // XSAVE
-	InstructionCategoryXSaveOPT                                 // XSAVEOPT
+	InstructionCategoryInvalid             InstructionCategory = iota // INVALID
+	InstructionCategoryADOX_ADCX                                      // ADOX_ADCX
+	InstructionCategoryAES                                            // AES
+	InstructionCategoryAMD3DNOW                                       // AMD3DNOW
+	InstructionCategoryAMX_TILE                                       // AMX_TILE
+	InstructionCategoryAVX                                            // AVX
+	InstructionCategoryAVX2                                           // AVX2
+	InstructionCategoryAVX2GATHER                                     // AVX2GATHER
+	InstructionCategoryAVX512                                         // AVX512
+	InstructionCategoryAVX512_4FMAPS                                  // AVX512_4FMAPS
+	InstructionCategoryAVX512_4VNNIW                                  // AVX512_4VNNIW
+	InstructionCategoryAVX512_BITALG                                  // AVX512_BITALG
+	InstructionCategoryAVX512_VBMI                                    // AVX512_VBMI
+	InstructionCategoryAVX512_VP2INTERSECT                            // AVX512_VP2INTERSECT
+	InstructionCategoryBINARY                                         // BINARY
+	InstructionCategoryBITBYTE                                        // BITBYTE
+	InstructionCategoryBLEND                                          // BLEND
+	InstructionCategoryBMI1                                           // BMI1
+	InstructionCategoryBMI2                                           // BMI2
+	InstructionCategoryBROADCAST                                      // BROADCAST
+	InstructionCategoryCALL                                           // CALL
+	InstructionCategoryCET                                            // CET
+	InstructionCategoryCLDEMOTE                                       // CLDEMOTE
+	InstructionCategoryCLFLUSHOPT                                     // CLFLUSHOPT
+	InstructionCategoryCLWB                                           // CLWB
+	InstructionCategoryCLZERO                                         // CLZERO
+	InstructionCategoryCMOV                                           // CMOV
+	InstructionCategoryCOMPRESS                                       // COMPRESS
+	InstructionCategoryCOND_BR                                        // COND_BR
+	InstructionCategoryCONFLICT                                       // CONFLICT
+	InstructionCategoryCONVERT                                        // CONVERT
+	InstructionCategoryDATAXFER                                       // DATAXFER
+	InstructionCategoryDECIMAL                                        // DECIMAL
+	InstructionCategoryENQCMD                                         // ENQCMD
+	InstructionCategoryEXPAND                                         // EXPAND
+	InstructionCategoryFCMOV                                          // FCMOV
+	InstructionCategoryFLAGOP                                         // FLAGOP
+	InstructionCategoryFMA4                                           // FMA4
+	InstructionCategoryGATHER                                         // GATHER
+	InstructionCategoryGFNI                                           // GFNI
+	InstructionCategoryIFMA                                           // IFMA
+	InstructionCategoryINTERRUPT                                      // INTERRUPT
+	InstructionCategoryIO                                             // IO
+	InstructionCategoryIOSTRINGOP                                     // IOSTRINGOP
+	InstructionCategoryKMASK                                          // KMASK
+	InstructionCategoryKNC                                            // KNC
+	InstructionCategoryKNCMASK                                        // KNCMASK
+	InstructionCategoryKNCSCALAR                                      // KNCSCALAR
+	InstructionCategoryLOGICAL                                        // LOGICAL
+	InstructionCategoryLOGICAL_FP                                     // LOGICAL_FP
+	InstructionCategoryLZCNT                                          // LZCNT
+	InstructionCategoryMISC                                           // MISC
+	InstructionCategoryMMX                                            // MMX
+	InstructionCategoryMOVDIR                                         // MOVDIR
+	InstructionCategoryMPX                                            // MPX
+	InstructionCategoryNOP                                            // NOP
+	InstructionCategoryPADLOCK                                        // PADLOCK
+	InstructionCategoryPCLMULQDQ                                      // PCLMULQDQ
+	InstructionCategoryPCONFIG                                        // PCONFIG
+	InstructionCategoryPKU                                            // PKU
+	InstructionCategoryPOP                                            // POP
+	InstructionCategoryPREFETCH                                       // PREFETCH
+	InstructionCategoryPREFETCHWT1                                    // PREFETCHWT1
+	InstructionCategoryPT                                             // PT
+	InstructionCategoryPUSH                                           // PUSH
+	InstructionCategoryRDPID                                          // RDPID
+	InstructionCategoryRDPRU                                          // RDPRU
+	InstructionCategoryRDRAND                                         // RDRAND
+	InstructionCategoryRDSEED                                         // RDSEED
+	InstructionCategoryRDWRFSGS                                       // RDWRFSGS
+	InstructionCategoryRET                                            // RET
+	InstructionCategoryROTATE                                         // ROTATE
+	InstructionCategorySCATTER                                        // SCATTER
+	InstructionCategorySEGOP                                          // SEGOP
+	InstructionCategorySEMAPHORE                                      // SEMAPHORE
+	InstructionCategorySERIALIZE                                      // SERIALIZE
+	InstructionCategorySETCC                                          // SETCC
+	InstructionCategorySGX                                            // SGX
+	InstructionCategorySHA                                            // SHA
+	InstructionCategorySHIFT                                          // SHIFT
+	InstructionCategorySMAP                                           // SMAP
+	InstructionCategorySSE                                            // SSE
+	InstructionCategorySTRINGOP                                       // STRINGOP
+	InstructionCategorySTTNI                                          // STTNI
+	InstructionCategorySYSCALL                                        // SYSCALL
+	InstructionCategorySYSRET                                         // SYSRET
+	InstructionCategorySYSTEM                                         // SYSTEM
+	InstructionCategoryTBM                                            // TBM
+	InstructionCategoryTSX_LDTRK                                      // TSX_LDTRK
+	InstructionCategoryUFMA                                           // UFMA
+	InstructionCategoryUNCOND_BR                                      // UNCOND_BR
+	InstructionCategoryVAES                                           // VAES
+	InstructionCategoryVBMI2                                          // VBMI2
+	InstructionCategoryVFMA                                           // VFMA
+	InstructionCategoryVPCLMULQDQ                                     // VPCLMULQDQ
+	InstructionCategoryVTX                                            // VTX
+	InstructionCategoryWAITPKG                                        // WAITPKG
+	InstructionCategoryWIDENOP                                        // WIDENOP
+	InstructionCategoryX87_ALU                                        // X87_ALU
+	InstructionCategoryXOP                                            // XOP
+	InstructionCategoryXSAVE                                          // XSAVE
+	InstructionCategoryXSAVEOPT                                       // XSAVEOPT
 )
 
 // BranchType is an enum of instruction branch types.
@@ -649,48 +656,56 @@ const (
 // ExceptionClass is an enum of exception classes.
 type ExceptionClass int
 
+//go:generate stringer -type=ExceptionClass -linecomment
+
 // ExceptionClass enum values.
 const (
-	ExceptionClassNone ExceptionClass = iota
-	ExceptionClassSSE1
-	ExceptionClassSSE2
-	ExceptionClassSSE3
-	ExceptionClassSSE4
-	ExceptionClassSSE5
-	ExceptionClassSSE7
-	ExceptionClassAVX1
-	ExceptionClassAVX2
-	ExceptionClassAVX3
-	ExceptionClassAVX4
-	ExceptionClassAVX5
-	ExceptionClassAVX6
-	ExceptionClassAVX7
-	ExceptionClassAVX8
-	ExceptionClassAVX11
-	ExceptionClassAVX12
-	ExceptionClassE1
-	ExceptionClassE1NF
-	ExceptionClassE2
-	ExceptionClassE2NF
-	ExceptionClassE3
-	ExceptionClassE3NF
-	ExceptionClassE4
-	ExceptionClassE4NF
-	ExceptionClassE5
-	ExceptionClassE5NF
-	ExceptionClassE6
-	ExceptionClassE6NF
-	ExceptionClassE7NM
-	ExceptionClassE7NM128
-	ExceptionClassE9NF
-	ExceptionClassE10
-	ExceptionClassE10NF
-	ExceptionClassE11
-	ExceptionClassE11NF
-	ExceptionClassE12
-	ExceptionClassE12NP
-	ExceptionClassK20
-	ExceptionClassK21
+	ExceptionClassNone    ExceptionClass = iota
+	ExceptionClassSSE1                   // SSE1
+	ExceptionClassSSE2                   // SSE2
+	ExceptionClassSSE3                   // SSE3
+	ExceptionClassSSE4                   // SSE4
+	ExceptionClassSSE5                   // SSE5
+	ExceptionClassSSE7                   // SSE7
+	ExceptionClassAVX1                   // AVX1
+	ExceptionClassAVX2                   // AVX2
+	ExceptionClassAVX3                   // AVX3
+	ExceptionClassAVX4                   // AVX4
+	ExceptionClassAVX5                   // AVX5
+	ExceptionClassAVX6                   // AVX6
+	ExceptionClassAVX7                   // AVX7
+	ExceptionClassAVX8                   // AVX8
+	ExceptionClassAVX11                  // AVX11
+	ExceptionClassAVX12                  // AVX12
+	ExceptionClassE1                     // E1
+	ExceptionClassE1NF                   // E1NF
+	ExceptionClassE2                     // E2
+	ExceptionClassE2NF                   // E2NF
+	ExceptionClassE3                     // E3
+	ExceptionClassE3NF                   // E3NF
+	ExceptionClassE4                     // E4
+	ExceptionClassE4NF                   // E4NF
+	ExceptionClassE5                     // E5
+	ExceptionClassE5NF                   // E5NF
+	ExceptionClassE6                     // E6
+	ExceptionClassE6NF                   // E6NF
+	ExceptionClassE7NM                   // E7NM
+	ExceptionClassE7NM128                // E7NM128
+	ExceptionClassE9NF                   // E9NF
+	ExceptionClassE10                    // E10
+	ExceptionClassE10NF                  // E10NF
+	ExceptionClassE11                    // E11
+	ExceptionClassE11NF                  // E11NF
+	ExceptionClassE12                    // E12
+	ExceptionClassE12NP                  // E12NP
+	ExceptionClassK20                    // K20
+	ExceptionClassK21                    // K21
+	ExceptionClassAMXE1                  // AMXE1
+	ExceptionClassAMXE2                  // AMXE2
+	ExceptionClassAMXE3                  // AMXE3
+	ExceptionClassAMXE4                  // AMXE4
+	ExceptionClassAMXE5                  // AMXE5
+	ExceptionClassAMXE6                  // AMXE6
 )
 
 func newInstructionFromZydis(zins *C.ZydisDecodedInstruction) *DecodedInstruction {

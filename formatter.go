@@ -5,7 +5,7 @@
 package zydis
 
 /*
-#cgo CFLAGS: -I./cgo/include
+#cgo CFLAGS: -I./lib/include
 
 #include <Zydis/Zydis.h>
 #include <stdlib.h>
@@ -113,7 +113,7 @@ ZyanStatus __ZydisFormatterTokenizeOperandEx(
 }
 
 ZyanStatus __ZydisFormatterTokenGetValue(ZyanUPointer token, ZydisTokenType* type, char** value) {
-	return ZydisFormatterTokenGetValue((const ZydisFormatterToken*)token, type, value);
+	return ZydisFormatterTokenGetValue((const ZydisFormatterToken*)token, type, (const char **)value);
 }
 
 ZyanStatus __ZydisFormatterTokenNext(ZyanUPointer token, ZyanUPointer *nextToken) {

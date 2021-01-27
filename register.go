@@ -5,8 +5,9 @@
 package zydis
 
 // Register is an enum of processor registers.
-//go:generate stringer -type=Register -linecomment
 type Register int
+
+//go:generate stringer -type=Register -linecomment
 
 // Register enum values.
 const (
@@ -203,6 +204,15 @@ const (
 	RegisterZMM29 // ZMM29
 	RegisterZMM30 // ZMM30
 	RegisterZMM31 // ZMM31
+	// Matrix registers
+	RegisterTMM0 // TMM0
+	RegisterTMM1 // TMM1
+	RegisterTMM2 // TMM2
+	RegisterTMM3 // TMM3
+	RegisterTMM4 // TMM4
+	RegisterTMM5 // TMM5
+	RegisterTMM6 // TMM6
+	RegisterTMM7 // TMM7
 	// Flags registers
 	RegisterFlags  // Flags
 	RegisterEFlags // EFlags

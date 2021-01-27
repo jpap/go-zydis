@@ -5,7 +5,7 @@
 package zydis // import "code.jpap.org/go-zydis"
 
 /*
-#cgo CFLAGS: -I./cgo/include
+#cgo CFLAGS: -I./lib/include
 #include <Zydis/Zydis.h>
 
 const ZyanStatus statusSuccess = ZYAN_STATUS_SUCCESS;

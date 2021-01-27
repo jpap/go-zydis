@@ -5,7 +5,7 @@
 package zydis
 
 /*
-#cgo CFLAGS: -I./cgo/include
+#cgo CFLAGS: -I./lib/include
 
 #include <Zydis/Zydis.h>
 

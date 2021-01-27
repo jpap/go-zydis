@@ -5,7 +5,7 @@
 package zydis
 
 /*
-#cgo CFLAGS: -I./cgo/include
+#cgo CFLAGS: -I./lib/include
 #include <Zydis/Zydis.h>
 
 int zVerMajor(ZyanU64 v) { return ZYDIS_VERSION_MAJOR(v); }

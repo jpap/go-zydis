@@ -18,9 +18,9 @@ See the file `cmd/demo.go`.
 
 ### Upgrading Zydis library
 
-The Zydis library is packaged as a static syso object file so that this package is go gettable.  Precompiled macOS (amd64), Linux (amd64), and Windows (amd64, 386) binaries are provided.
+The Zydis library is packaged as a static syso object file so that this package is go gettable.  Precompiled macOS (amd64, arm64), Linux (amd64, arm64), and Windows (amd64, 386) binaries are provided.
 
-Use the Makefile in the `cgo/` folder to upgrade to a newer version, rebuild, or add support for another platform.  The default Makefile target clones the Zydis repo and its submodule, performs the build, and creates the syso files for Go linkage under macOS with suitable cross-compilers installed.
+Use the Makefile in the `lib/` folder to upgrade to a newer version, rebuild, or add support for another platform.  The default Makefile target clones the Zydis repo and its submodule, performs the build, and creates the syso files for Go linkage under macOS with suitable cross-compilers installed.
 
 ### License
 

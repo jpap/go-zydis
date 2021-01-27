@@ -5,8 +5,9 @@
 package zydis
 
 // Mnemonic is an enum of instruction mnemonics.
-//go:generate stringer -type=Mnemonic -linecomment
 type Mnemonic int
+
+//go:generate stringer -type=Mnemonic -linecomment
 
 // Mnemonic values
 const (
@@ -161,6 +162,8 @@ const (
 	MnemonicENCLV                              // enclv
 	MnemonicENDBR32                            // endbr32
 	MnemonicENDBR64                            // endbr64
+	MnemonicENQCMD                             // enqcmd
+	MnemonicENQCMDS                            // enqcmds
 	MnemonicENTER                              // enter
 	MnemonicEXTRACTPS                          // extractps
 	MnemonicEXTRQ                              // extrq
@@ -186,13 +189,13 @@ const (
 	MnemonicFCOMPP                             // fcompp
 	MnemonicFCOS                               // fcos
 	MnemonicFDECSTP                            // fdecstp
-	MnemonicFDISI8087NOP                       // fdisi8087_nop
+	MnemonicFDISI8087NOP                       // fdisi8087nop
 	MnemonicFDIV                               // fdiv
 	MnemonicFDIVP                              // fdivp
 	MnemonicFDIVR                              // fdivr
 	MnemonicFDIVRP                             // fdivrp
 	MnemonicFEMMS                              // femms
-	MnemonicFENI8087NOP                        // feni8087_nop
+	MnemonicFENI8087NOP                        // feni8087nop
 	MnemonicFFREE                              // ffree
 	MnemonicFFREEP                             // ffreep
 	MnemonicFIADD                              // fiadd
@@ -234,7 +237,7 @@ const (
 	MnemonicFRNDINT                            // frndint
 	MnemonicFRSTOR                             // frstor
 	MnemonicFSCALE                             // fscale
-	MnemonicFSETPM287NOP                       // fsetpm287_nop
+	MnemonicFSETPM287NOP                       // fsetpm287nop
 	MnemonicFSIN                               // fsin
 	MnemonicFSINCOS                            // fsincos
 	MnemonicFSQRT                              // fsqrt
@@ -289,6 +292,7 @@ const (
 	MnemonicINVEPT                             // invept
 	MnemonicINVLPG                             // invlpg
 	MnemonicINVLPGA                            // invlpga
+	MnemonicINVLPGB                            // invlpgb
 	MnemonicINVPCID                            // invpcid
 	MnemonicINVVPID                            // invvpid
 	MnemonicIRET                               // iret
@@ -386,6 +390,7 @@ const (
 	MnemonicLDDQU                              // lddqu
 	MnemonicLDMXCSR                            // ldmxcsr
 	MnemonicLDS                                // lds
+	MnemonicLDTILECFG                          // ldtilecfg
 	MnemonicLEA                                // lea
 	MnemonicLEAVE                              // leave
 	MnemonicLES                                // les
@@ -416,6 +421,7 @@ const (
 	MnemonicMAXPS                              // maxps
 	MnemonicMAXSD                              // maxsd
 	MnemonicMAXSS                              // maxss
+	MnemonicMCOMMIT                            // mcommit
 	MnemonicMFENCE                             // mfence
 	MnemonicMINPD                              // minpd
 	MnemonicMINPS                              // minps
@@ -623,6 +629,7 @@ const (
 	MnemonicPSLLDQ                             // pslldq
 	MnemonicPSLLQ                              // psllq
 	MnemonicPSLLW                              // psllw
+	MnemonicPSMASH                             // psmash
 	MnemonicPSRAD                              // psrad
 	MnemonicPSRAW                              // psraw
 	MnemonicPSRLD                              // psrld
@@ -654,6 +661,7 @@ const (
 	MnemonicPUSHF                              // pushf
 	MnemonicPUSHFD                             // pushfd
 	MnemonicPUSHFQ                             // pushfq
+	MnemonicPVALIDATE                          // pvalidate
 	MnemonicPXOR                               // pxor
 	MnemonicRCL                                // rcl
 	MnemonicRCPPS                              // rcpps
@@ -665,6 +673,7 @@ const (
 	MnemonicRDPID                              // rdpid
 	MnemonicRDPKRU                             // rdpkru
 	MnemonicRDPMC                              // rdpmc
+	MnemonicRDPRU                              // rdpru
 	MnemonicRDRAND                             // rdrand
 	MnemonicRDSEED                             // rdseed
 	MnemonicRDSSPD                             // rdsspd
@@ -672,6 +681,8 @@ const (
 	MnemonicRDTSC                              // rdtsc
 	MnemonicRDTSCP                             // rdtscp
 	MnemonicRET                                // ret
+	MnemonicRMPADJUST                          // rmpadjust
+	MnemonicRMPUPDATE                          // rmpupdate
 	MnemonicROL                                // rol
 	MnemonicROR                                // ror
 	MnemonicRORX                               // rorx
@@ -693,6 +704,7 @@ const (
 	MnemonicSCASD                              // scasd
 	MnemonicSCASQ                              // scasq
 	MnemonicSCASW                              // scasw
+	MnemonicSERIALIZE                          // serialize
 	MnemonicSETB                               // setb
 	MnemonicSETBE                              // setbe
 	MnemonicSETL                               // setl
@@ -748,6 +760,7 @@ const (
 	MnemonicSTOSQ                              // stosq
 	MnemonicSTOSW                              // stosw
 	MnemonicSTR                                // str
+	MnemonicSTTILECFG                          // sttilecfg
 	MnemonicSUB                                // sub
 	MnemonicSUBPD                              // subpd
 	MnemonicSUBPS                              // subps
@@ -759,7 +772,18 @@ const (
 	MnemonicSYSEXIT                            // sysexit
 	MnemonicSYSRET                             // sysret
 	MnemonicT1MSKC                             // t1mskc
+	MnemonicTDPBF16PS                          // tdpbf16ps
+	MnemonicTDPBSSD                            // tdpbssd
+	MnemonicTDPBSUD                            // tdpbsud
+	MnemonicTDPBUSD                            // tdpbusd
+	MnemonicTDPBUUD                            // tdpbuud
 	MnemonicTEST                               // test
+	MnemonicTILELOADD                          // tileloadd
+	MnemonicTILELOADDT1                        // tileloaddt1
+	MnemonicTILERELEASE                        // tilerelease
+	MnemonicTILESTORED                         // tilestored
+	MnemonicTILEZERO                           // tilezero
+	MnemonicTLBSYNC                            // tlbsync
 	MnemonicTPAUSE                             // tpause
 	MnemonicTZCNT                              // tzcnt
 	MnemonicTZCNTI                             // tzcnti
@@ -836,6 +860,8 @@ const (
 	MnemonicVCVTFXPNTPS2DQ                     // vcvtfxpntps2dq
 	MnemonicVCVTFXPNTPS2UDQ                    // vcvtfxpntps2udq
 	MnemonicVCVTFXPNTUDQ2PS                    // vcvtfxpntudq2ps
+	MnemonicVCVTNE2PS2BF16                     // vcvtne2ps2bf16
+	MnemonicVCVTNEPS2BF16                      // vcvtneps2bf16
 	MnemonicVCVTPD2DQ                          // vcvtpd2dq
 	MnemonicVCVTPD2PS                          // vcvtpd2ps
 	MnemonicVCVTPD2QQ                          // vcvtpd2qq
@@ -881,6 +907,7 @@ const (
 	MnemonicVDIVPS                             // vdivps
 	MnemonicVDIVSD                             // vdivsd
 	MnemonicVDIVSS                             // vdivss
+	MnemonicVDPBF16PS                          // vdpbf16ps
 	MnemonicVDPPD                              // vdppd
 	MnemonicVDPPS                              // vdpps
 	MnemonicVERR                               // verr
@@ -1120,6 +1147,8 @@ const (
 	MnemonicVMXON                              // vmxon
 	MnemonicVORPD                              // vorpd
 	MnemonicVORPS                              // vorps
+	MnemonicVP2INTERSECTD                      // vp2intersectd
+	MnemonicVP2INTERSECTQ                      // vp2intersectq
 	MnemonicVP4DPWSSD                          // vp4dpwssd
 	MnemonicVP4DPWSSDS                         // vp4dpwssds
 	MnemonicVPABSB                             // vpabsb
@@ -1591,6 +1620,7 @@ const (
 	MnemonicXOR                                // xor
 	MnemonicXORPD                              // xorpd
 	MnemonicXORPS                              // xorps
+	MnemonicXRESLDTRK                          // xresldtrk
 	MnemonicXRSTOR                             // xrstor
 	MnemonicXRSTOR64                           // xrstor64
 	MnemonicXRSTORS                            // xrstors
@@ -1607,5 +1637,6 @@ const (
 	MnemonicXSHA1                              // xsha1
 	MnemonicXSHA256                            // xsha256
 	MnemonicXSTORE                             // xstore
-	MnemonicXTEST                              // xtes
+	MnemonicXSUSLDTRK                          // xsusldtrk
+	MnemonicXTEST                              // xtest
 )
