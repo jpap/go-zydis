@@ -8,7 +8,7 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"code.jpap.org/go-zydis"
+	"go.jpap.org/go-zydis"
 )
 
 func main() {
