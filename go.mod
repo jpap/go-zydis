@@ -1,3 +1,3 @@
-module code.jpap.org/go-zydis
+module go.jpap.org/zydis
 
 go 1.16

@@ -9,7 +9,7 @@ It was created because the [pure-Go disassembler](https://godoc.org/golang.org/x
 ### Import
 
 ```
-import "code.jpap.org/go-zydis"
+import "go.jpap.org/zydis"
 ```
 
 ### Sample code

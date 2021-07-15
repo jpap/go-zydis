@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE.md file.
 
-package zydis // import "code.jpap.org/go-zydis"
+package zydis // import "go.jpap.org/zydis"
 
 /*
 #cgo CFLAGS: -I./lib/include
