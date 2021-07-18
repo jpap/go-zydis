@@ -1,6 +1,6 @@
 # Copyright 2019 John Papandriopoulos.  All rights reserved.
 # Use of this source code is governed by a MIT-style
-# license that can be found in the LICENSE.md file.
+# license that can be found in the LICENSE file.
 
 # This Makefile was designed to run on macOS, using a cross-compiler to
 # build the Linux and Windows versions of the zydis library.
